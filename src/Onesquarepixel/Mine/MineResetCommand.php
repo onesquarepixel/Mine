@@ -4,21 +4,21 @@ use Illuminate\Console\Command;
 use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Input\InputArgument;
 
-class MineInitCommand extends Command {
+class MineResetCommand extends Command {
 
   /**
    * The console command name.
    *
    * @var string
    */
-  protected $name = 'mine:init';
+  protected $name = 'mine:reset';
 
   /**
    * The console command description.
    *
    * @var string
    */
-  protected $description = 'Add an Admin Panel to your application.';
+  protected $description = 'Remove all mine contents.';
 
   /**
    * Create a new command instance.
@@ -28,7 +28,7 @@ class MineInitCommand extends Command {
   public function __construct()
   {
     parent::__construct();
-    $this->mine = new Mine;
+    $this->mine = new Mine(new MineRepository, new Helper);
   }
 
   /**
@@ -38,14 +38,10 @@ class MineInitCommand extends Command {
    */
   public function fire()
   {
-    // $this->call('php artisan confide:controller');
-    // $this->call('php artisan confide:routes');
-    // $this->line(Mine::greeting());
 
-    $this->mine->adminPages();
-    $this->line('Admin Pages created');
+    $this->mine->reset();
+    $this->line('All Mine files deleted.');
 
-    // File::append(app_path() . '/routes.php', 'ere');
   }
 
   /**

@@ -2,6 +2,9 @@
 
 use Illuminate\Support\ServiceProvider;
 
+use Onesquarepixel\Mine\Helper;
+use Onesquarepixel\Mine\MineRepository;
+
 class MineServiceProvider extends ServiceProvider {
 
 	/**
@@ -30,15 +33,23 @@ class MineServiceProvider extends ServiceProvider {
 	{
 		$this->app['mine'] = $this->app->share(function($app)
 	  {
-	    return new Mine;
+	    return new Mine();
 	  });
 
-	  $this->app['command.mine'] = $this->app->share(function($app)
+	  $this->app['command.mine.init'] = $this->app->share(function($app)
 		{
 	    return new MineInitCommand;
 		});
 
-		$this->commands('command.mine');
+		$this->app['command.mine.reset'] = $this->app->share(function($app)
+		{
+	    return new MineResetCommand;
+		});
+
+		$this->commands(array(
+			'command.mine.init',
+			'command.mine.reset'
+		));
 	}
 
 	/**

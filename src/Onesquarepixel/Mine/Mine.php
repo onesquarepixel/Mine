@@ -1,41 +1,37 @@
 <?php namespace Onesquarepixel\Mine;
 
+require_once 'Helper.php';
+require_once 'MineRepository.php';
+require_once 'AdminRepository.php';
+
 class Mine {
+
+  public function __construct()
+  {
+    $this->repo = new MineRepository;
+    $this->helper = new Helper;
+    $this->admin_repo = new AdminRepository;
+  }
 
   public function adminPages()
   {
-    $this->addAdminRouteGroup();
-    $this->addAdminViewsFolder();
-    $this->makeAdminLoginPage();
-    $this->copyCss();
-    $this->copyJs();
+    $this->repo->addAdminRouteGroup();
+    $this->repo->addAdminViewsFolder();
+    $this->repo->makeAdminLoginPage();
+    $this->repo->copyCss();
+    $this->repo->copyJs();
   }
 
-  public function addAdminRouteGroup()
+  public function adminController()
   {
-    $content = \File::get(__DIR__ . '/../../templates/adminRoutes.txt');
-
-    \File::append(app_path() . '/routes.php', $content);
+    // $this->admin_repo->
   }
 
-  public function addAdminViewsFolder()
+  public function reset()
   {
-    \File::makeDirectory(app_path() . "/views/admin", 0700);
-  }
-
-  public function makeAdminLoginPage()
-  {
-    \File::copy(__DIR__ . '/../../templates/login.blade.php', app_path() . '/views/admin/login.blade.php');
-  }
-
-  public function copyCss()
-  {
-    \File::copyDirectory(__DIR__ . '/../../templates/css', public_path() . '/css');
-  }
-
-  public function copyJs()
-  {
-    \File::copyDirectory(__DIR__ . '/../../templates/js', public_path() . '/js');
+    $this->helper->rmdir_recursive(app_path() . '/views/admin');
+    $this->helper->rmdir_recursive(public_path() . '/css');
+    $this->helper->rmdir_recursive(public_path() . '/js');
   }
 
 }
